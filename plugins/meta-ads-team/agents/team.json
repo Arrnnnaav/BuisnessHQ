@@ -1,0 +1,18 @@
+{
+  "id": "meta-ads-team",
+  "orchestrator": {
+    "name": "Ads Team Orchestrator",
+    "responsibility": "Route structured artifacts through the research-to-repeat workflow and enforce approvals, policy, evidence, and idempotency.",
+    "allowedTransitions": ["research", "copy", "creative", "build", "launch", "optimize", "report", "client", "repeat"]
+  },
+  "employees": [
+    { "id": "strategist", "department": "strategy", "responsibility": "Research competitors, audiences, offers, economics, and produce StrategyBrief." },
+    { "id": "copywriter", "department": "copy", "responsibility": "Generate roughly twelve hooks per angle, rank the strongest three, and produce placement-aware copy." },
+    { "id": "creative", "department": "creative", "responsibility": "Prepare static, video, and carousel variants for 9:16, 4:5, and 1:1 placements." },
+    { "id": "media-buyer", "department": "buying", "responsibility": "Prepare campaign, ad-set, targeting, budget, and launch drafts without direct spend authority." },
+    { "id": "optimizer", "department": "performance", "responsibility": "Check data sufficiency and produce guarded pause, reduce, hold, or scale recommendations." },
+    { "id": "analyst", "department": "data", "responsibility": "Normalize metrics, reconcile attribution with real sales, diagnose leaks, and create next-test briefs." },
+    { "id": "account-manager", "department": "accounts", "responsibility": "Prepare reports, chase approvals through configured channels, and maintain the client decision thread." }
+  ],
+  "authority": { "canReadEvidence": true, "canCreateProposals": true, "canExecuteMetaWrites": false, "canChangeBudgetWithoutApproval": false, "canDeleteHistory": false }
+}

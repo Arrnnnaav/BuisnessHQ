@@ -1,0 +1,22 @@
+{
+  "id": "pricing_agent",
+  "name": "Pricing Intelligence Agent",
+  "version": "1.0.0",
+  "description": "Works out what your products and services should cost, using your catalog and what the market is charging.",
+  "category": "business",
+  "dependencies": ["catalog"],
+  "permissions": { "required": ["read:catalog", "read:pricing", "write:pricing"], "optional": ["network"] },
+  "businessos": {
+    "minVersion": "0.1.0",
+    "source": "https://github.com/Arrnnnaav/Pricing-Agent",
+    "runtime": "python",
+    "execution": "staging-enabled",
+    "release": {
+      "stage": "internal",
+      "customerAvailable": false,
+      "limitation": "Internal adapter used by the customer-facing pricing app."
+    }
+  },
+  "capabilities": ["pricing.analyze", "pricing.recommend", "pricing.optimize"],
+  "adapter": { "entrypoint": "main.py", "stagingEntrypoint": "scripts/stage.py", "requiredCredentials": ["gemini"], "approvalRequiredFor": ["pricing.change"], "dataMapping": { "catalog": "sku,name,cost,price,category", "recommendation": "sku,current_price,recommended_price,confidence,reasoning" } }
+}

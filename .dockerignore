@@ -1,0 +1,12 @@
+.git
+.agents
+.codex
+node_modules
+data
+plugins/pricing_agent/.venv
+plugins/pricing_agent/vendor/.git
+**/__pycache__
+**/*.pyc
+*.log
+apps/dashboard/dist
+apps/dashboard/node_modules

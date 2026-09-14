@@ -1,0 +1,211 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BusinessOS Plugin Manifest Schema",
+  "type": "object",
+  "required": ["id", "name", "version", "description", "businessos"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique plugin identifier (lowercase, hyphen-separated)",
+      "pattern": "^[a-z][a-z0-9-]*[a-z0-9]$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable plugin name"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version number",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Clear, concise description of what this plugin does"
+    },
+    "author": {
+      "type": "object",
+      "description": "Plugin author information",
+      "properties": {
+        "name": {"type": "string"},
+        "email": {"type": "string"},
+        "url": {"type": "string"}
+      },
+      "required": ["name"]
+    },
+    "contributors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "email": {"type": "string"},
+          "url": {"type": "string"}
+        }
+      }
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX license identifier"
+    },
+    "homepage": {
+      "type": "string",
+      "format": "uri",
+      "description": "Plugin homepage URL"
+    },
+    "repository": {
+      "type": "object",
+      "description": "Source code repository",
+      "properties": {
+        "type": {"type": "string", "enum": ["git", "svn"]},
+        "url": {"type": "string", "format": "uri"}
+      },
+      "required": ["url"]
+    },
+    "bugs": {
+      "type": "object",
+      "description": "Issue tracker URL",
+      "properties": {
+        "url": {"type": "string", "format": "uri"}
+      },
+      "required": ["url"]
+    },
+    "businessos": {
+      "type": "object",
+      "description": "BusinessOS-specific metadata",
+      "required": ["minVersion"],
+      "properties": {
+        "minVersion": {
+          "type": "string",
+          "description": "Minimum BusinessOS version required",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "testedUpTo": {
+          "type": "string",
+          "description": "Maximum BusinessOS version tested with",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "ui": {
+          "type": "object",
+          "description": "UI integration points",
+          "properties": {
+            "showInDashboard": {
+              "type": "boolean",
+              "description": "Whether to show this plugin in the Apps & Features dashboard"
+            },
+            "settingsPage": {
+              "type": "boolean",
+              "description": "Whether this plugin has a settings page"
+            },
+            "widgets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "description": {"type": "string"},
+                  "position": {"type": "string", "enum": ["top", "bottom", "left", "right"]},
+                  "size": {"type": "string", "enum": ["small", "medium", "large"]}
+                }
+              },
+              "description": "Dashboard widgets provided by this plugin"
+            },
+            "navigationItem": {
+              "type": "boolean",
+              "description": "Whether this plugin appears in the main navigation"
+            }
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "List of plugin IDs this plugin depends on",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*[a-z0-9]$"
+      },
+      "uniqueItems": true
+    },
+    "peerDependencies": {
+      "type": "array",
+      "description": "List of plugin IDs this plugin works with but doesn't strictly depend on",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*[a-z0-9]$"
+      },
+      "uniqueItems": true
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Permissions required by this plugin",
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(read|write|execute|admin):[a-z][a-z0-9_]*(:[a-z][a-z0-9_]*)*$"
+          },
+          "description": "Permissions that must be granted for plugin to function"
+        },
+        "optional": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(read|write|execute|admin):[a-z][a-z0-9_]*(:[a-z][a-z0-9_]*)*$"
+          },
+          "description": "Permissions that enhance functionality but aren't strictly required"
+        }
+      }
+    },
+    "fileStructure": {
+      "type": "object",
+      "description": "Expected file structure within the plugin directory",
+      "properties": {
+        "api": {"type": "string", "description": "API route definitions"},
+        "dashboard": {"type": "string", "description": "Dashboard pages and components"},
+        "widgets": {"type": "string", "description": "Dashboard widgets"},
+        "tools": {"type": "string", "description": "Callable functions for agents"},
+        "agents": {"type": "string", "description": "Specialist agent definitions"},
+        "skills": {"type": "string", "description": "Executable business procedures"},
+        "workflows": {"type": "string", "description": "Multi-step business processes"},
+        "events": {"type": "string", "description": "Event listeners and emitters"},
+        "settings": {"type": "string", "description": "User-configurable options"},
+        "migrations": {"type": "string", "description": "Database migration scripts"},
+        "health": {"type": "string", "description": "Health monitoring procedures"}
+      }
+    },
+    "scripts": {
+      "type": "object",
+      "description": "Lifecycle scripts",
+      "properties": {
+        "install": {"type": "string", "description": "Script to run on plugin installation"},
+        "uninstall": {"type": "string", "description": "Script to run on plugin uninstallation"},
+        "update": {"type": "string", "description": "Script to run on plugin updates"},
+        "healthCheck": {"type": "string", "description": "Script to run for health checking"}
+      }
+    },
+    "assets": {
+      "type": "object",
+      "description": "Plugin assets",
+      "properties": {
+        "icon": {"type": "string", "format": "uri", "description": "Plugin icon URL"},
+        "screenshots": {
+          "type": "array",
+          "items": {"type": "string", "format": "uri"},
+          "description": "Screenshot URLs"
+        }
+      }
+    },
+    "keywords": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Keywords for plugin discovery"
+    },
+    "category": {
+      "type": "string",
+      "description": "Plugin category for organization in UI",
+      "enum": ["business", "growth", "intelligence", "communication", "utility"]
+    }
+  },
+  "additionalProperties": false
+}

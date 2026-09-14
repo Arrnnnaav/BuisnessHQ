@@ -1,0 +1,43 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama-data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  model-setup:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["ollama pull qwen3:4b-instruct && ollama pull embeddinggemma"]
+    restart: "no"
+
+  businessos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4173
+      OLLAMA_URL: http://ollama:11434
+    ports:
+      - "127.0.0.1:4173:4173"
+    volumes:
+      - businessos-data:/app/data
+    depends_on:
+      model-setup:
+        condition: service_completed_successfully
+
+volumes:
+  businessos-data:
+  ollama-data:

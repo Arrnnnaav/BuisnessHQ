@@ -1,0 +1,22 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { CapabilityRegistry, PluginLifecycle, PluginManager } from "../core/runtime/index.mjs";
+
+const manifest = JSON.parse(await readFile("plugins/meta-ads-team/manifest.json", "utf8"));
+assert.equal(manifest.id, "meta-ads-team");
+assert.equal(manifest.category, "growth");
+assert.ok(manifest.capabilities.includes("meta_ads.campaign.plan"));
+assert.deepEqual(manifest.permissions.required, ["read:meta_ads", "read:attribution", "read:analytics"]);
+const team = JSON.parse(await readFile("plugins/meta-ads-team/agents/team.json", "utf8"));
+assert.equal(team.employees.length, 7);
+assert.deepEqual(team.employees.map((employee) => employee.id), ["strategist", "copywriter", "creative", "media-buyer", "optimizer", "analyst", "account-manager"]);
+const workflow = JSON.parse(await readFile("plugins/meta-ads-team/workflows/closed-loop.json", "utf8"));
+assert.deepEqual(workflow.approvalGates, ["offer", "creative", "campaign.launch", "budget.change", "client.send"]);
+const manager = new PluginManager({ root: "plugins" });
+await manager.discover();
+assert.ok(manager.manifestFor("meta-ads-team"));
+const capabilities = new CapabilityRegistry();
+const lifecycle = new PluginLifecycle({ pluginManager: manager, capabilityRegistry: capabilities });
+await lifecycle.install("tenant-meta", "meta-ads-team");
+assert.equal(capabilities.find("meta_ads.campaign.plan")[0].pluginId, "meta-ads-team");
+console.log("meta ads team self-test passed");

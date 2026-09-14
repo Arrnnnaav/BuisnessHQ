@@ -1,0 +1,96 @@
+{
+  "id": "google_business",
+  "name": "Google Business Profile Manager",
+  "version": "1.0.0",
+  "description": "Complete Google Business Profile management for local search visibility, customer engagement, and reputation management",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "gbp-overview",
+          "description": "Overview of Google Business Profile performance",
+          "position": "top",
+          "size": "medium"
+        },
+        {
+          "name": "gbp-reviews",
+          "description": "Real-time review monitoring and management",
+          "position": "bottom",
+          "size": "large"
+        }
+      ]
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "seo",
+    "content",
+    "reviews",
+    "analytics"
+  ],
+  "permissions": {
+    "required": [
+      "read:google_business",
+      "write:google_business",
+      "execute:gbp_post_creation",
+      "execute:gbp_reply_management",
+      "read:insights"
+    ],
+    "optional": [
+      "write:insights",
+      "execute:gbp_optimization",
+      "execute:local_seo_sync",
+      "read:website",
+      "write:website"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/google_business.svg",
+    "screenshots": [
+      "/assets/screenshots/gbp-dashboard.png",
+      "/assets/screenshots/gbp-posts.png",
+      "/assets/screenshots/gbp-reviews.png",
+      "/assets/screenshots/gbp-insights.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "google",
+    "business-profile",
+    "local-seo",
+    "reviews",
+    "posts",
+    "insights",
+    "maps"
+  ],
+  "category": "growth"
+}

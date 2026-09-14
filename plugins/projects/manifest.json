@@ -1,0 +1,113 @@
+{
+  "id": "projects",
+  "name": "Project Portfolio Manager",
+  "version": "1.0.0",
+  "description": "Complete project management system for tracking, showcasing, and leveraging completed work for marketing and sales",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "projects-overview",
+          "description": "Overview of project pipeline and performance",
+          "position": "top"
+        },
+        {
+          "name": "projects-recent",
+          "description": "Recently completed projects and highlights",
+          "position": "bottom"
+        }
+      ]
+    }
+  },
+  "dependencies": [
+    "catalog"
+  ],
+  "peerDependencies": [
+    "seo",
+    "content",
+    "google_business",
+    "reviews",
+    "crm",
+    "quotations",
+    "pricing",
+    "analytics"
+  ],
+  "permissions": {
+    "required": [
+      "read:projects",
+      "write:projects",
+      "execute:project_creation",
+      "execute:project_completion",
+      "read:catalog"
+    ],
+    "optional": [
+      "write:catalog",
+      "execute:project_repurposing",
+      "execute:case_study_creation",
+      "execute:testimonial_extraction",
+      "read:seo",
+      "write:seo",
+      "read:google_business",
+      "write:google_business",
+      "read:reviews",
+      "write:reviews",
+      "read:crm",
+      "write:crm",
+      "read:quotations",
+      "write:quotations",
+      "read:pricing",
+      "write:pricing",
+      "read:analytics",
+      "write:analytics"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/projects.svg",
+    "screenshots": [
+      "/assets/screenshots/projects-dashboard.png",
+      "/assets/screenshots/projects-portfolio.png",
+      "/assets/screenshots/project-detail.png",
+      "/assets/screenshots/project-repurposing.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "projects",
+    "portfolio",
+    "case-studies",
+    "testimonials",
+    "work-showcase",
+    "repurposing",
+    "marketing-assets"
+  ],
+  "category": "business"
+}

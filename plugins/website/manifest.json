@@ -1,0 +1,111 @@
+{
+  "id": "website",
+  "name": "Website Manager & CMS Connector",
+  "version": "1.0.0",
+  "description": "Complete website management system with content editing, SEO optimization, performance monitoring, and version control",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "website-overview",
+          "description": "Overview of website performance and health",
+          "position": "top",
+          "size": "medium"
+        },
+        {
+          "name": "website-realtime",
+          "description": "Real-time website traffic and activity monitoring",
+          "position": "bottom",
+          "size": "large"
+        }
+      ]
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "seo",
+    "google_business",
+    "analytics",
+    "content",
+    "projects",
+    "catalog"
+  ],
+  "permissions": {
+    "required": [
+      "read:website",
+      "write:website",
+      "execute:content_editing",
+      "execute:seo_optimization",
+      "execute:performance_optimization",
+      "read:analytics"
+    ],
+    "optional": [
+      "write:analytics",
+      "execute:version_control",
+      "execute:rollback",
+      "execute:personalization",
+      "read:seo",
+      "write:seo",
+      "read:google_business",
+      "write:google_business",
+      "read:analytics",
+      "write:analytics",
+      "read:content",
+      "write:content",
+      "read:projects",
+      "write:projects",
+      "read:catalog",
+      "write:catalog"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/website.svg",
+    "screenshots": [
+      "/assets/screenshots/website-dashboard.png",
+      "/assets/screenshots/website-editor.png",
+      "/assets/screenshots/website-analytics.png",
+      "/assets/screenshots/website-versioning.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "website",
+    "content-management",
+    "cms",
+    "seo",
+    "performance",
+    "version-control",
+    "rollback",
+    "analytics"
+  ],
+  "category": "intelligence"
+}

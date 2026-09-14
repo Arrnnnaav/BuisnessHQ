@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BusinessOS Operator</title>
+<!--
+  Deliberately a single plain page rather than a second React build. Ruling R4 chose a
+  React SPA for the customer product; this is an internal tool for one operator, and a
+  build pipeline it does not need is a build pipeline that can break at the moment we most
+  need to block a bad release.
+-->
+<style>
+  :root{--ink:#17212b;--muted:#77818b;--line:#e8ecef;--paper:#fff;--bg:#f7f8f9;--blue:#246bfe;--green:#168a5b;--amber:#b36b00;--red:#a8391b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px Inter,ui-sans-serif,system-ui,sans-serif}
+  header{background:#0f1a26;color:#e9eef4;padding:14px 22px;display:flex;justify-content:space-between;align-items:center}
+  header b{letter-spacing:-.02em}
+  header small{color:#8fa0b3}
+  nav{display:flex;gap:2px;padding:0 22px;background:#152232;overflow-x:auto}
+  nav button{background:none;border:0;color:#9eabb9;padding:11px 14px;font:inherit;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+  nav button.active{color:#fff;border-bottom-color:var(--blue)}
+  main{padding:22px;max-width:1200px;margin:auto}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .metric b{display:block;font-size:26px;margin-top:6px}
+  .metric span{color:var(--muted);font-size:12px}
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+  .tag{border-radius:11px;padding:3px 8px;font-size:11px;background:#eef1f4;color:var(--muted)}
+  .tag.ok{background:#e8f8f0;color:var(--green)}
+  .tag.warn{background:#fff4df;color:var(--amber)}
+  .tag.bad{background:#fdf3f0;color:var(--red)}
+  button.act{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 10px;font:inherit;cursor:pointer;margin-right:6px}
+  button.act:hover{border-color:#cbd3dc}
+  button.danger{border-color:#e7bcb0;color:var(--red)}
+  button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  input,select,textarea{border:1px solid var(--line);border-radius:7px;padding:9px;font:inherit}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  pre{background:#0f1a26;color:#d9e7f7;border-radius:8px;padding:14px;font-size:12px;overflow:auto;max-height:340px}
+  .err{background:#fdf3f0;border:1px solid #e7bcb0;color:var(--red);border-radius:8px;padding:10px 12px;margin-bottom:12px}
+  .muted{color:var(--muted)}
+  h2{font-size:16px;margin:0 0 12px}
+  .gate{max-width:420px;margin:16vh auto;text-align:center}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="module">
+const KEY = "businessos.operator.token";
+let token = sessionStorage.getItem(KEY) || "";
+let tab = "overview";
+let error = null;
+const app = document.getElementById("app");
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+
+async function api(path, options = {}) {
+  const res = await fetch(path, {
+    ...options,
+    headers: { "content-type": "application/json", authorization: `Bearer ${token}`, ...(options.headers || {}) },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
+}
+
+const act = async (fn) => { error = null; try { await fn(); } catch (e) { error = e.message; } render(); };
+
+function gate() {
+  app.innerHTML = `<div class="gate card">
+    <h2>BusinessOS Operator</h2>
+    <p class="muted">This console manages every customer installation. It is not part of the customer product.</p>
+    <div class="row"><input id="tok" type="password" placeholder="Operator token" style="flex:1"><button class="act primary" id="go">Unlock</button></div>
+    ${error ? `<div class="err" style="margin-top:12px">${esc(error)}</div>` : ""}
+  </div>`;
+  document.getElementById("go").onclick = async () => {
+    token = document.getElementById("tok").value.trim();
+    try { await api("/api/overview"); sessionStorage.setItem(KEY, token); error = null; render(); }
+    catch (e) { error = e.message; token = ""; gate(); }
+  };
+}
+
+const TABS = [["overview","Overview"],["companies","Companies"],["plugins","Plugins & Releases"],["packages","Agents & MCP"],["studio","Plugin Studio"],["reviews","Reviews"],["assistant","Assistant"],["audit","Audit"]];
+
+async function render() {
+  if (!token) return gate();
+  let view = "";
+  try {
+    if (tab === "overview") view = await overview();
+    else if (tab === "companies") view = await companies();
+    else if (tab === "plugins") view = await plugins();
+    else if (tab === "packages") view = await packagesView();
+    else if (tab === "studio") view = studio();
+    else if (tab === "reviews") view = await reviewsView();
+    else if (tab === "assistant") view = assistant();
+    else view = await auditView();
+  } catch (e) {
+    if (/token/i.test(e.message)) { token = ""; sessionStorage.removeItem(KEY); return gate(); }
+    view = `<div class="err">${esc(e.message)}</div>`;
+  }
+
+  app.innerHTML = `
+    <header><div><b>BusinessOS Operator</b> <small>control plane</small></div>
+      <button class="act" id="lock">Lock</button></header>
+    <nav>${TABS.map(([id,label]) => `<button data-tab="${id}" class="${tab===id?"active":""}">${label}</button>`).join("")}</nav>
+    <main>${error ? `<div class="err">${esc(error)}</div>` : ""}${view}</main>`;
+
+  app.querySelectorAll("nav button").forEach((b) => { b.onclick = () => { tab = b.dataset.tab; error = null; render(); }; });
+  document.getElementById("lock").onclick = () => { token = ""; sessionStorage.removeItem(KEY); gate(); };
+  wire();
+}
+
+async function overview() {
+  const o = await api("/api/overview");
+  const metric = (label, value) => `<div class="card metric"><span>${label}</span><b>${value}</b></div>`;
+  return `<div class="grid">
+      ${metric("Companies", o.companies)}
+      ${metric("Installations", o.installations)}
+      ${metric("Healthy", o.healthy)}
+      ${metric("Needs attention", o.needsAttention)}
+      ${metric("Not heard from", o.unknown)}
+      ${metric("Plugin installs", o.pluginInstalls)}
+      ${metric("Published plugins", o.plugins)}
+      ${metric("Blocked versions", o.blocked)}
+    </div>
+    <div class="card"><h2>Package signing key</h2>
+      <p class="muted">Clients verify every package against this public key. The private key never leaves this machine.</p>
+      <pre>${esc(o.publicKey)}</pre></div>`;
+}
+
+async function companies() {
+  const list = await api("/api/tenants");
+  const rows = list.map((t) => `<tr>
+      <td><b>${esc(t.companyName)}</b><div class="muted">${esc(t.tenantId)}</div></td>
+      <td><span class="tag ${t.health.state==="healthy"?"ok":t.health.state==="unknown"?"":"bad"}">${esc(t.health.state)}</span>
+        ${t.health.reason?`<div class="muted">${esc(t.health.reason)}</div>`:""}</td>
+      <td>${esc(t.coreVersion || "—")}</td>
+      <td>${esc(t.channel)}</td>
+      <td>${esc(t.plan)}<div class="muted">${t.slots.used}/${t.slots.limit===null?"∞":(t.slots.limit===Infinity?"∞":t.slots.limit)} apps${t.slots.overLimit?" · over limit":""}</div></td>
+      <td>${t.plugins.map((p)=>`${esc(p.id)} ${esc(p.version || "assigned")}`).join("<br>") || "<span class='muted'>none</span>"}</td>
+      <td>${(t.users||[]).map((u)=>`${esc(u.userId)} <button class="act danger" data-user-remove="${esc(t.tenantId)}|${esc(u.userId)}">×</button>`).join("<br>") || "<span class='muted'>none</span>"}</td>
+      <td>
+        <select data-plan="${esc(t.tenantId)}">${["free","starter","growth","pro"].map((p)=>`<option ${p===t.plan?"selected":""}>${p}</option>`).join("")}</select>
+        <select data-channel="${esc(t.tenantId)}">${["stable","beta","alpha","development"].map((c)=>`<option ${c===t.channel?"selected":""}>${c}</option>`).join("")}</select>
+        <button class="act" data-user-add="${esc(t.tenantId)}">Add user</button>
+        <button class="act" data-assign="${esc(t.tenantId)}">Assign plugin</button>
+      </td></tr>`).join("");
+  return `<div class="card"><h2>Companies</h2>
+      <table><thead><tr><th>Company</th><th>Health</th><th>Core</th><th>Channel</th><th>Plan</th><th>Installed</th><th>Users</th><th>Manage</th></tr></thead>
+      <tbody>${rows || `<tr><td colspan="8" class="muted">No installations have checked in yet.</td></tr>`}</tbody></table>
+      <div class="row"><input id="new-id" placeholder="tenant id"><input id="new-name" placeholder="company name">
+        <button class="act primary" id="add-tenant">Add company</button></div></div>`;
+}
+
+async function plugins() {
+  const list = await api("/api/plugins");
+  const analytics = await api("/api/plugin-analytics");
+  const stats = new Map(analytics.map((item) => [item.pluginId, item]));
+  return list.map((p) => { const stat = stats.get(p.id) ?? {}; return `<div class="card"><h2>${esc(p.name)} <span class="muted">${esc(p.id)}</span></h2>
+      <p class="muted">${esc(p.description)} · ${esc(p.category)} · ${esc(p.visibility)}${p.requiredPlan?` · needs ${esc(p.requiredPlan)}`:""}</p>
+      <p><span class="tag ok">${stat.activeInstalls ?? 0} active</span> <span class="tag">${stat.tenantCount ?? 0} companies</span> <span class="tag">${stat.disabledInstalls ?? 0} disabled</span></p>
+      <table><thead><tr><th>Version</th><th>Channel</th><th>Min core</th><th>State</th><th>Actions</th></tr></thead><tbody>
+      ${p.versions.map((v)=>`<tr>
+        <td>${esc(v.version)}</td><td>${esc(v.channel)}</td><td>${esc(v.minimumCoreVersion)}</td>
+        <td>${v.blocked?`<span class="tag bad">blocked</span><div class="muted">${esc(v.blockedReason)}</div>`:`<span class="tag ok">available</span>`}</td>
+        <td>
+          <select data-promote="${esc(p.id)}|${esc(v.version)}">${["development","alpha","beta","stable"].map((c)=>`<option ${c===v.channel?"selected":""}>${c}</option>`).join("")}</select>
+          ${v.blocked
+            ? `<button class="act" data-unblock="${esc(p.id)}|${esc(v.version)}">Unblock</button>`
+            : `<button class="act danger" data-block="${esc(p.id)}|${esc(v.version)}">Block</button>`}
+          <button class="act" data-rollout="${esc(p.id)}|${esc(v.version)}">Stage rollout</button>
+        </td></tr>`).join("") || `<tr><td colspan="5" class="muted">No versions published.</td></tr>`}
+      </tbody></table></div>`; }).join("") || `<div class="card muted">Nothing published yet. Use Plugin Studio.</div>`;
+}
+
+function assistant() {
+  const recommendations = window.__assistantResult ?? [];
+  return `<div class="card"><h2>Operator Assistant</h2>
+    <p class="muted">Recommendations use operator metadata only: plugin manifests, releases, installation state, and tenant health. Customer business content is never included.</p>
+    <div class="row"><input id="assistant-query" placeholder="Ask about failing, unused, stale, or overlapping plugins" style="flex:1"><button class="act primary" id="ask-assistant">Analyze</button></div>
+    <div id="assistant-results" style="margin-top:14px">${recommendations.length ? recommendations.map((item) => `<p><span class="tag ${item.severity === "warning" ? "warn" : ""}">${esc(item.type)}</span> ${esc(item.message)}</p>`).join("") : `<span class="muted">Ask a question to see recommendations.</span>`}</div></div>`;
+}
+
+async function reviewsView() {
+  const reviews = await api("/api/reviews");
+  return `<div class="card"><h2>Plugin reviews</h2><p class="muted">Flagged inspections remain here until a named reviewer approves or rejects them.</p>
+    <table><thead><tr><th>Package</th><th>Requested by</th><th>Findings</th><th>Status</th><th>Action</th></tr></thead><tbody>
+    ${reviews.map((review) => `<tr><td><b>${esc(review.pluginId)}</b><div class="muted">${esc(review.version)}</div></td><td>${esc(review.requestedBy)}</td><td>${esc((review.needsReview||[]).join(", "))}</td><td><span class="tag ${review.status === "approved" ? "ok" : review.status === "rejected" ? "bad" : "warn"}">${esc(review.status)}</span></td><td>${review.status === "pending" ? `<button class="act primary" data-review-approve="${esc(review.id)}">Approve</button><button class="act danger" data-review-reject="${esc(review.id)}">Reject</button>` : "—"}</td></tr>`).join("") || `<tr><td colspan="5" class="muted">No package reviews.</td></tr>`}
+    </tbody></table></div>`;
+}
+
+async function packagesView() {
+  const list = await api("/api/packages");
+  return `<div class="card"><h2>First-party agents, skills & MCP</h2><p class="muted">These packages are GhostCursor-authored, signed through the package system, and declarative by default. They cannot bypass plugin authorization or approval.</p><table><thead><tr><th>Type</th><th>Package</th><th>Version</th><th>Capabilities</th><th>Status</th><th>Action</th></tr></thead><tbody>${list.map((item) => `<tr><td>${esc(item.type)}</td><td><b>${esc(item.id)}</b></td><td>${esc(item.version)}</td><td>${esc((item.capabilities||[]).join(", "))}</td><td><span class="tag ${item.status === "published" ? "ok" : "warn"}">${esc(item.status)}</span></td><td><button class="act" data-package-status="${esc(item.type)}|${esc(item.id)}|${esc(item.version)}|${item.status === "disabled" ? "published" : "disabled"}">${item.status === "disabled" ? "Enable" : "Disable"}</button></td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function studio() {
+  const r = window.__inspection;
+  return `<div class="card"><h2>Plugin Studio</h2>
+      <p class="muted">Analyse a repository, review what it asks for, then publish. This is where repository import lives — never in a business owner's Marketplace.</p>
+      <div class="row"><input id="repo-url" placeholder="HTTPS GitHub repository URL" style="flex:1" value="${esc(window.__lastRepository||"")}">
+        <input id="repo-ref" placeholder="branch/tag (optional)" value="${esc(window.__lastRef||"")}">
+        <button class="act primary" id="inspect">Inspect</button></div>
+      <div class="row"><textarea id="requested-outcome" placeholder="What should this repository become? (optional)" style="width:100%;min-height:70px">${esc(window.__requestedOutcome||"")}</textarea></div></div>
+    ${r ? `<div class="card"><h2>${esc(r.pluginId)} ${esc(r.version)}</h2>
+      <p><span class="tag ${r.ok?"ok":"bad"}">${esc(r.report)}</span> ${r.needsReview.length?`<span class="tag warn">review: ${esc(r.needsReview.join(", "))}</span>`:""}</p>
+      <table><thead><tr><th>Stage</th><th>Result</th><th>Detail</th></tr></thead><tbody>
+      ${r.stages.map((s)=>`<tr><td>${esc(s.stage)}</td>
+        <td><span class="tag ${!s.passed?"bad":s.needsReview?"warn":"ok"}">${!s.passed?"fail":s.needsReview?"check":"pass"}</span></td>
+        <td class="muted">${esc(detail(s))}</td></tr>`).join("")}
+      </tbody></table>
+      ${r.ok ? `<div class="row">
+        <select id="pub-channel">${["development","alpha","beta","stable"].map((c)=>`<option>${c}</option>`).join("")}</select>
+        ${r.needsReview.length?`<input id="approved-by" placeholder="approved by (required)">`:""}
+        ${r.needsReview.length && r.reviewStatus !== "approved" ? `<button class="act" id="approve-review">Approve review</button>` : ""}
+        <button class="act primary" id="publish">Publish</button></div>`:""}
+      </div>` : ""}`;
+}
+
+function detail(s) {
+  if (s.stage === "permissions") return `${(s.requested||[]).join(", ") || "none"}${s.highRisk?.length?` — high risk: ${s.highRisk.join(", ")}`:""}`;
+  if (s.stage === "source-scan") return (s.findings||[]).map((f)=>`${f.path}: ${f.reason}`).join("; ") || `${s.fileCount} files, nothing flagged`;
+  if (s.stage === "tests") return s.ran ? (s.output || "") : (s.reason || "");
+  if (s.stage === "manifest") return (s.errors||[]).join(", ") || "valid";
+  if (s.stage === "analyze") return s.compatibility ? `${s.compatibility.label} — ${s.compatibility.reason}` : "";
+  return "";
+}
+
+async function auditView() {
+  const entries = await api("/api/audit");
+  return `<div class="card"><h2>Audit</h2><table><thead><tr><th>When</th><th>Action</th><th>Detail</th></tr></thead><tbody>
+    ${entries.map((e)=>`<tr><td class="muted">${esc(e.at||e.timestamp||"")}</td><td>${esc(e.action)}</td>
+      <td class="muted">${esc(JSON.stringify(Object.fromEntries(Object.entries(e).filter(([k])=>!["action","at","timestamp","id"].includes(k)))))}</td></tr>`).join("")
+      || `<tr><td colspan="3" class="muted">Nothing yet.</td></tr>`}
+    </tbody></table></div>`;
+}
+
+function wire() {
+  const add = document.getElementById("add-tenant");
+  if (add) add.onclick = () => act(async () => {
+    await api("/api/tenants", { method: "POST", body: JSON.stringify({
+      tenantId: document.getElementById("new-id").value.trim(),
+      companyName: document.getElementById("new-name").value.trim(),
+    })});
+  });
+
+  document.querySelectorAll("[data-plan]").forEach((el) => { el.onchange = () => act(() =>
+    api(`/api/tenants/${el.dataset.plan}/plan`, { method: "POST", body: JSON.stringify({ plan: el.value }) })); });
+  document.querySelectorAll("[data-channel]").forEach((el) => { el.onchange = () => act(() =>
+    api(`/api/tenants/${el.dataset.channel}/channel`, { method: "POST", body: JSON.stringify({ channel: el.value }) })); });
+
+  document.querySelectorAll("[data-user-add]").forEach((el) => { el.onclick = () => { const userId = prompt("User id to add"); if (!userId) return; const name = prompt("User name (optional)") || ""; act(() => api(`/api/tenants/${el.dataset.userAdd}/user`, { method: "POST", body: JSON.stringify({ userId, name }) })); }; });
+  document.querySelectorAll("[data-user-remove]").forEach((el) => { el.onclick = () => { const [tenantId, userId] = el.dataset.userRemove.split("|"); if (confirm(`Remove ${userId} from this company?`)) act(() => api(`/api/tenants/${tenantId}/remove-user`, { method: "POST", body: JSON.stringify({ userId }) })); }; });
+  document.querySelectorAll("[data-assign]").forEach((el) => { el.onclick = () => { const pluginId = prompt("Plugin id to assign"); if (!pluginId) return; const userId = prompt("User id (optional)") || null; act(() => api(`/api/tenants/${el.dataset.assign}/assign`, { method: "POST", body: JSON.stringify({ pluginId, userId }) })); }; });
+
+  document.querySelectorAll("[data-promote]").forEach((el) => { el.onchange = () => act(() => {
+    const [pluginId, version] = el.dataset.promote.split("|");
+    return api("/api/releases", { method: "POST", body: JSON.stringify({ pluginId, version, channel: el.value }) });
+  }); });
+
+  document.querySelectorAll("[data-block]").forEach((el) => { el.onclick = () => {
+    const [pluginId, version] = el.dataset.block.split("|");
+    const reason = prompt(`Why is ${pluginId} ${version} being withdrawn?\n\nClients will show this reason and refuse to install it.`);
+    if (!reason) return;
+    act(() => api("/api/releases/block", { method: "POST", body: JSON.stringify({ pluginId, version, reason }) }));
+  }; });
+
+  document.querySelectorAll("[data-unblock]").forEach((el) => { el.onclick = () => {
+    const [pluginId, version] = el.dataset.unblock.split("|");
+    act(() => api("/api/releases/block", { method: "POST", body: JSON.stringify({ pluginId, version, blocked: false }) }));
+  }; });
+
+  document.querySelectorAll("[data-rollout]").forEach((el) => { el.onclick = () => {
+    const [pluginId, version] = el.dataset.rollout.split("|");
+    const canary = prompt("Stage 1 — which tenant ids get it first? (comma separated)");
+    if (canary === null) return;
+    act(() => api("/api/rollouts", { method: "POST", body: JSON.stringify({ pluginId, version, stages: [
+      { tenants: canary.split(",").map((s)=>s.trim()).filter(Boolean) }, { percent: 10 }, { percent: 50 }, { percent: 100 },
+    ]})}));
+  }; });
+
+  const inspect = document.getElementById("inspect");
+  if (inspect) inspect.onclick = () => act(async () => {
+    const repositoryUrl = document.getElementById("repo-url").value.trim();
+    const ref = document.getElementById("repo-ref").value.trim();
+    const requestedOutcome = document.getElementById("requested-outcome").value.trim();
+    window.__lastRepository = repositoryUrl;
+    window.__lastRef = ref;
+    window.__requestedOutcome = requestedOutcome;
+    window.__inspection = await api("/api/studio/inspect", { method: "POST", body: JSON.stringify({ repositoryUrl, ref, requestedOutcome }) });
+  });
+
+  const ask = document.getElementById("ask-assistant");
+  if (ask) ask.onclick = () => act(async () => {
+    const result = await api("/api/operator-assistant", { method: "POST", body: { query: document.getElementById("assistant-query").value.trim() } });
+    window.__assistantResult = result.recommendations;
+  });
+
+  document.querySelectorAll("[data-review-approve],[data-review-reject]").forEach((el) => { el.onclick = () => act(async () => {
+    const approvedBy = prompt("Name the reviewer");
+    if (!approvedBy) return;
+    const decision = el.dataset.reviewApprove ? "approved" : "rejected";
+    await api(`/api/reviews/${el.dataset.reviewApprove || el.dataset.reviewReject}/decide`, { method: "POST", body: JSON.stringify({ decision, approvedBy, notes: decision === "rejected" ? (prompt("Reason for rejection") || "") : "" }) });
+  }); });
+  document.querySelectorAll("[data-package-status]").forEach((el) => { el.onclick = () => act(async () => { const [type, id, version, status] = el.dataset.packageStatus.split("|"); const reason = prompt("Reason for this package status change (optional)") || ""; await api(`/api/packages/${type}/${id}/${version}/status`, { method: "POST", body: JSON.stringify({ status, reason }) }); }); });
+
+  const publish = document.getElementById("publish");
+  const approve = document.getElementById("approve-review");
+  if (approve) approve.onclick = () => act(async () => {
+    const reviewer = document.getElementById("approved-by").value.trim();
+    if (!reviewer) throw new Error("Name the reviewer first.");
+    await api(`/api/reviews/${window.__inspection.reviewId}/decide`, { method: "POST", body: JSON.stringify({ decision: "approved", approvedBy: reviewer }) });
+    window.__inspection.reviewStatus = "approved";
+  });
+  if (publish) publish.onclick = () => act(async () => {
+    const r = window.__inspection;
+    const approvedBy = document.getElementById("approved-by")?.value.trim() || null;
+    await api("/api/studio/publish", { method: "POST", body: JSON.stringify({
+      pluginId: r.pluginId, version: r.version, channel: document.getElementById("pub-channel").value, approvedBy, reviewId: r.reviewId,
+    })});
+    window.__inspection = null;
+    tab = "plugins";
+  });
+}
+
+render();
+</script>
+</body>
+</html>

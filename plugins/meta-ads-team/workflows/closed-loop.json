@@ -1,0 +1,18 @@
+{
+  "id": "meta-ads-closed-loop",
+  "name": "Research to Repeat",
+  "states": ["research", "copy", "creative", "build", "launch", "optimize", "report", "client", "repeat", "blocked"],
+  "events": ["strategy.brief.created", "copy.package.created", "creative.package.created", "campaign.plan.created", "approval.requested", "campaign.launched", "metrics.updated", "optimization.decision.created", "analysis.completed", "report.created", "client.message.proposed", "next_test_brief.created"],
+  "transitions": [
+    { "from": "research", "event": "strategy.brief.created", "to": "copy" },
+    { "from": "copy", "event": "copy.package.created", "to": "creative" },
+    { "from": "creative", "event": "creative.package.created", "to": "build" },
+    { "from": "build", "event": "campaign.plan.created", "to": "launch" },
+    { "from": "launch", "event": "campaign.launched", "to": "optimize" },
+    { "from": "optimize", "event": "analysis.completed", "to": "report" },
+    { "from": "report", "event": "report.created", "to": "client" },
+    { "from": "client", "event": "next_test_brief.created", "to": "repeat" },
+    { "from": "repeat", "event": "strategy.brief.created", "to": "copy" }
+  ],
+  "approvalGates": ["offer", "creative", "campaign.launch", "budget.change", "client.send"]
+}

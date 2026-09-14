@@ -1,0 +1,12 @@
+{
+  "id": "meta-ads-safety",
+  "version": "1.0.0",
+  "purpose": "Evaluate every proposed Meta action against budget, evidence, and approval controls.",
+  "requires": ["proposedAction", "budgetPolicy", "approvalState", "evidenceWindow"],
+  "produces": ["safetyVerdict"],
+  "rules": [
+    "Reject stale, missing, or insufficient evidence.",
+    "Reject unapproved launches and unbounded budget changes.",
+    "Require an idempotency key for every provider write."
+  ]
+}

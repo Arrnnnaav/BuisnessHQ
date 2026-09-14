@@ -1,0 +1,10 @@
+{
+  "name": "ABizCreator BusinessOS",
+  "short_name": "BusinessOS",
+  "description": "Local-first AI business operating system",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f8f9",
+  "theme_color": "#111b27",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

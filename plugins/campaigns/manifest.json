@@ -1,0 +1,115 @@
+{
+  "id": "campaigns",
+  "name": "Campaign Automation Manager",
+  "version": "1.0.0",
+  "description": "Multi-channel campaign management system for creating, executing, and tracking marketing campaigns",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "campaigns-overview",
+        "description": "Overview of campaign performance and ROI",
+        "position": "top",
+        "size": "medium"
+      },
+      {
+        "name": "campaigns-active",
+        "description": "Currently running campaigns and their status",
+        "position": "bottom",
+        "size": "large"
+      }
+    ]
+      }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "content",
+    "email",
+    "whatsapp",
+    "social",
+    "seo",
+    "google_business",
+    "analytics",
+    "crm"
+  ],
+  "permissions": {
+    "required": [
+      "read:campaigns",
+      "write:campaigns",
+      "execute:campaign_creation",
+      "execute:campaign_execution",
+      "execute:performance_tracking"
+    ],
+    "optional": [
+      "execute:audience_segmentation",
+      "execute:personalization",
+      "execute:a_b_testing",
+      "read:content",
+      "write:content",
+      "read:email",
+      "write:email",
+      "read:whatsapp",
+      "write:whatsapp",
+      "read:social",
+      "write:social",
+      "read:seo",
+      "write:seo",
+      "read:google_business",
+      "write:google_business",
+      "read:analytics",
+      "write:analytics",
+      "read:crm",
+      "write:crm"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/campaigns.svg",
+    "screenshots": [
+      "/assets/screenshots/campaigns-dashboard.png",
+      "/assets/screenshots/campaign-detail.png",
+      "/assets/screenshots/email-campaign.png",
+      "/assets/screenshots/whatsapp-campaign.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "campaigns",
+    "marketing-automation",
+    "multi-channel",
+    "email-marketing",
+    "whatsapp-marketing",
+    "social-marketing",
+    "roi-tracking",
+    "audience-segmentation"
+  ],
+  "category": "growth"
+}

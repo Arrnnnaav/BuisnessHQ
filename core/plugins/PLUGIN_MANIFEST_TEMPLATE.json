@@ -1,0 +1,64 @@
+{
+  "$schema": "./plugin-manifest-schema.json",
+  "id": "PLUGIN_ID_HERE",
+  "name": "Human Readable Plugin Name",
+  "version": "1.0.0",
+  "description": "Clear, concise description of what this plugin does",
+  "author": "BusinessOS Team",
+  "contributors": [],
+  "license": "MIT",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "businessos": {
+    "minVersion": "0.1.0",
+    "testedUpTo": "0.1.0",
+    "requiresPHP": false,
+    "requiresNode": true,
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "widgets": [],
+      "navigationItem": true
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [],
+  "permissions": {
+    "required": [],
+    "optional": []
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "",
+    "uninstall": "",
+    "update": "",
+    "healthCheck": ""
+  },
+  "assets": {
+    "icon": "",
+    "screenshots": []
+  },
+  "keywords": [
+    "businessos",
+    "plugin"
+  ],
+  "category": "business" // or growth, intelligence, communication, etc.
+}

@@ -1,0 +1,121 @@
+{
+  "id": "content",
+  "name": "Content Marketing Manager",
+  "version": "1.0.0",
+  "description": "Complete content creation, management, and distribution system for blogs, social media, email, and marketing materials",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "content-overview",
+          "description": "Overview of content performance and engagement",
+          "position": "top",
+          "size": "medium"
+        },
+        {
+          "name": "content-calendar",
+          "description": "Content publishing calendar and scheduling",
+          "position": "bottom",
+          "size": "large"
+        }
+      ]
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "seo",
+    "projects",
+    "google_business",
+    "reviews",
+    "crm",
+    "campaigns",
+    "social",
+    "whatsapp",
+    "email",
+    "analytics"
+  ],
+  "permissions": {
+    "required": [
+      "read:content",
+      "write:content",
+      "execute:content_creation",
+      "execute:content_publishing",
+      "execute:seo_optimization"
+    ],
+    "optional": [
+      "execute:content_repurposing",
+      "execute:content_localization",
+      "execute:content_personalization",
+      "read:seo",
+      "write:seo",
+      "read:projects",
+      "write:projects",
+      "read:google_business",
+      "write:google_business",
+      "read:reviews",
+      "write:reviews",
+      "read:crm",
+      "write:crm",
+      "read:campaigns",
+      "write:campaigns",
+      "read:social",
+      "write:social",
+      "read:whatsapp",
+      "write:whatsapp",
+      "read:email",
+      "write:email",
+      "read:analytics",
+      "write:analytics"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/content.svg",
+    "screenshots": [
+      "/assets/screenshots/content-dashboard.png",
+      "/assets/screenshots/content-calendar.png",
+      "/assets/screenshots/blog-editor.png",
+      "/assets/screenshots/social-media-planner.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "content",
+    "marketing",
+    "blogging",
+    "social-media",
+    "email-marketing",
+    "content-creation",
+    "repurposing",
+    "calendar"
+  ],
+  "category": "growth"
+}

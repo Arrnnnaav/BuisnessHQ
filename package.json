@@ -1,0 +1,46 @@
+{
+  "name": "business-os",
+  "version": "0.1.0",
+  "description": "AI Business Operating System - A local-first AI operating layer for small businesses",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"pnpm:dev:desktop\" \"pnpm:dev:dashboard\"",
+    "dev:desktop": "cd apps/desktop && pnpm dev",
+    "operator": "node operator/server.mjs",
+    "dev:dashboard": "npm --prefix apps/dashboard run dev",
+    "build": "npm run build:dashboard",
+    "build:desktop": "node -e \"console.log('Desktop packaging is not implemented; use the dashboard PWA. See apps/desktop/README.md.')\"",
+    "build:dashboard": "npm --prefix apps/dashboard run build",
+    "test": "node tests/runtime.selftest.mjs && node tests/navigation.selftest.mjs && node tests/plugin-lifecycle.selftest.mjs && node tests/guide.selftest.mjs && node tests/agent-planner.selftest.mjs && node tests/meta-ads-team.selftest.mjs && node tests/meta-ads-safety.selftest.mjs && node tests/control-plane.selftest.mjs && node tests/catalog-workbook.selftest.mjs && node tests/package-registry.selftest.mjs && node tests/package-installations.selftest.mjs && node tests/control-plane-marketplace.selftest.mjs && node tests/pointai.selftest.mjs && node tests/pointai-setup.selftest.mjs && node tests/external-guide.selftest.mjs && node tests/marketplace.selftest.mjs && node tests/company-brain.selftest.mjs && node tests/product-harness.selftest.mjs && node tests/sandbox.selftest.mjs && node tests/pricing-agent-bridge.selftest.mjs && node tests/ai-runtime.selftest.mjs && node tests/semantic-index.selftest.mjs && node tests/seo-auditor.selftest.mjs && node tests/seo-closed-loop.selftest.mjs && node tests/seo-vertical.selftest.mjs && node tests/release-preflight.selftest.mjs",
+    "demo": "node apps/cli.mjs",
+    "start": "node apps/server.mjs",
+    "pricing:stage": "py -3.12 plugins\\pricing_agent\\scripts\\stage.py --catalog plugins\\pricing_agent\\tests\\fixtures\\staging-catalog.json",
+    "test:e2e:demo": "node scripts/e2e-demo.mjs",
+    "release:check": "node scripts/release-preflight.mjs --target=staging",
+    "release:pilot": "node scripts/release-preflight.mjs --target=pilot",
+    "release:production": "node scripts/release-preflight.mjs --target=production",
+    "test:seo:v1": "node scripts/seo-v1-smoke.mjs",
+    "owner:reset": "node scripts/reset-owner.mjs",
+    "test:watch": "vitest",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx,.mjs",
+    "format": "prettier --write ."
+  },
+  "workspaces": [
+    "apps/*",
+    "core/*",
+    "plugins/*",
+    "integrations/*",
+    "industry_packs/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "eslint": "^8.45.0",
+    "prettier": "^3.0.0",
+    "vitest": "^0.34.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

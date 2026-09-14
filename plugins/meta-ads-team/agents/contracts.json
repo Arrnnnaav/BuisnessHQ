@@ -1,0 +1,9 @@
+{
+  "StrategyBrief": { "required": ["strategy_id", "client_id", "target_audience", "winning_angles", "offer", "source_evidence", "created_at"], "confidenceRange": [0, 1] },
+  "CopyPackage": { "required": ["copy_package_id", "angle_id", "hooks", "selected_hooks", "primary_text", "headlines", "cta_variants", "placement_variants", "claims_used", "evidence", "policy_risk_flags"] },
+  "CreativePackage": { "required": ["creative_package_id", "copy_package_id", "angle_id", "assets", "variants", "quality_checks"], "allowedRatios": ["9:16", "4:5", "1:1"] },
+  "CampaignPlan": { "required": ["campaign_id", "objective", "ad_sets", "budget", "targeting", "approval_required", "idempotency_key"] },
+  "OptimizationDecision": { "required": ["decision_id", "campaign_id", "data_sufficiency", "action", "reason", "evidence", "approval_required"], "actions": ["hold", "pause", "reduce", "scale", "refresh", "investigate"] },
+  "AttributionSnapshot": { "required": ["window", "sales_source", "orders", "revenue", "platform_conversions", "confidence", "source_evidence"] },
+  "ClientReport": { "required": ["report_id", "period", "spend", "revenue", "roas", "cpa", "findings", "next_test_brief", "approval_status"] }
+}

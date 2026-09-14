@@ -1,0 +1,108 @@
+{
+  "id": "competitors",
+  "name": "Competitive Intelligence Monitor",
+  "version": "1.0.0",
+  "description": "Systematic monitoring and analysis of competitors to identify opportunities, threats, and market positioning",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "competitors-overview",
+          "description": "Overview of competitive landscape and positioning",
+          "position": "top",
+          "size": "medium"
+        },
+        {
+          "name": "competitors-analysis",
+          "description": "Detailed competitor analysis and opportunity identification",
+          "position": "bottom",
+          "size": "large"
+        }
+      ]
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "seo",
+    "google_business",
+    "analytics",
+    "content",
+    "projects",
+    "pricing"
+  ],
+  "permissions": {
+    "required": [
+      "read:competitors",
+      "write:competitors",
+      "execute:competitor_analysis",
+      "execute:website_monitoring",
+      "execute:content_analysis"
+    ],
+    "optional": [
+      "execute:pricing_analysis",
+      "execute:social_media_monitoring",
+      "execute:review_analysis",
+      "read:seo",
+      "write:seo",
+      "read:google_business",
+      "write:google_business",
+      "read:analytics",
+      "write:analytics",
+      "read:content",
+      "write:content",
+      "read:projects",
+      "write:projects",
+      "read:pricing",
+      "write:pricing"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/competitors.svg",
+    "screenshots": [
+      "/assets/screenshots/competitors-dashboard.png",
+      "/assets/screenshots/competitor-analysis.png",
+      "/assets/screenshots/website-monitoring.png",
+      "/assets/screenshots/content-gap-analysis.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "competitors",
+    "competitive-intelligence",
+    "market-analysis",
+    "gap-analysis",
+    "benchmarking",
+    "opportunity-identification",
+    "threat-assessment"
+  ],
+  "category": "intelligence"
+}

@@ -1,0 +1,4 @@
+export class SearchConsoleClient {
+  constructor({ accessToken, fetchImpl = fetch } = {}) { this.accessToken = accessToken; this.fetch = fetchImpl; }
+  async query({ siteUrl, startDate, endDate, dimensions = ["query", "page"], rowLimit = 25_000 }) { const response = await this.fetch(`https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`, { method: "POST", headers: { authorization: `Bearer ${this.accessToken}`, "content-type": "application/json" }, body: JSON.stringify({ startDate, endDate, dimensions, rowLimit }), signal: AbortSignal.timeout(30_000) }); const data = await response.json(); if (!response.ok) throw new Error(`Search Console query failed: ${response.status} ${data.error?.message ?? "Unknown error"}`); return { siteUrl, startDate, endDate, dimensions, rows: data.rows ?? [], importedAt: new Date().toISOString() }; }
+}

@@ -1,0 +1,24 @@
+{
+  "ignorePatterns": [
+    "apps/dashboard/dist/",
+    "apps/dashboard/legacy/",
+    "plugins/pricing_agent/.venv/",
+    "plugins/pricing_agent/vendor/"
+  ],
+  "env": {
+    "es2022": true,
+    "node": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": ["eslint:recommended"],
+  "rules": {
+    "no-unused-vars": "off"
+  }
+}

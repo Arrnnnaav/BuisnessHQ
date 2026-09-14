@@ -1,0 +1,69 @@
+{
+  "id": "printing",
+  "name": "Printing Business Pack",
+  "version": "1.0.0",
+  "description": "Complete industry-specific configuration for printing and design businesses including workflows, templates, and specialized tools",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": false,
+      "settingsPage": true,
+      "navigationItem": false
+    }
+  },
+  "dependencies": [
+    "catalog",
+    "projects",
+    "crm",
+    "quotations",
+    "pricing",
+    "seo",
+    "local_seo",
+    "google_business",
+    "reviews",
+    "content",
+    "campaigns"
+  ],
+  "peerDependencies": [],
+  "permissions": {
+    "required": [],
+    "optional": []
+  },
+  "fileStructure": {
+    "workflows": "workflows/",
+    "templates": "templates/",
+    "skills": "skills/",
+    "dashboards": "dashboards/",
+    "kpis": "kpis/",
+    "onboarding": "onboarding/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js
+  },
+  "assets": {
+    "icon": "/assets/icons/printing-pack.svg",
+    "screenshots": [
+      "/assets/screenshots/printing-pack-overview.png",
+      "/assets/screenshots/printing-workflows.png",
+      "/assets/screenshots/printing-templates.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "industry-pack",
+    "printing",
+    "design",
+    "workflows",
+    "templates",
+    "abizcreator"
+  ],
+  "category": "industry-pack"
+}

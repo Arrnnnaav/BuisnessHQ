@@ -1,0 +1,32 @@
+import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { AuditLog, CompanyBrain, EventBus, PolicyEngine, WorkflowEngine } from "../core/runtime/index.mjs";
+
+const root = await mkdtemp(join(tmpdir(), "businessos-brain-"));
+const brain = new CompanyBrain({ stateFile: join(root, "brain.json") });
+await brain.load();
+await brain.add({ key: "brochure_minimum_quantity", value: "100", tags: ["brochure", "pricing"] });
+await brain.add({ key: "brochure_minimum_quantity", value: "250", tags: ["brochure", "pricing"] });
+assert.equal(brain.list({ status: "conflicting" }).length, 2);
+const skill = await brain.addSkill({ name: "Create brochure quote", steps: ["Validate inputs"], requiredContext: ["pricing"] });
+assert.equal(brain.resolve("brochure pricing").records.length, 2);
+assert.equal(brain.resolve("brochure quote").skills[0].id, skill.id);
+
+const audit = new AuditLog();
+const workflowFile = join(root, "workflows.json");
+const workflows = new WorkflowEngine({ policyEngine: new PolicyEngine(), eventBus: new EventBus(), audit, stateFile: workflowFile });
+await workflows.load();
+const lowRisk = await workflows.request({ tenantId: "tenant-a", name: "seo audit", risk: "low", idempotencyKey: "seo-audit-1" });
+const highRisk = await workflows.request({ tenantId: "tenant-a", name: "publish GBP post", risk: "high" });
+assert.equal(lowRisk.status, "completed");
+assert.equal(highRisk.status, "awaiting-approval");
+assert.equal((await workflows.request({ tenantId: "tenant-a", name: "seo audit duplicate", risk: "low", idempotencyKey: "seo-audit-1" })).id, lowRisk.id);
+assert.equal((await workflows.decide(highRisk.id, "approved", { tenantId: "tenant-a" })).status, "completed");
+assert.equal(audit.list().length, 3);
+const recoveredWorkflows = new WorkflowEngine({ policyEngine: new PolicyEngine(), stateFile: workflowFile });
+await recoveredWorkflows.load();
+assert.equal(recoveredWorkflows.list({ tenantId: "tenant-a" }).length, 2);
+await rm(root, { recursive: true, force: true });
+console.log("company brain self-test passed");

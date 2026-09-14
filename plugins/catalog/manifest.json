@@ -1,0 +1,68 @@
+{
+  "id": "catalog",
+  "name": "Catalog Manager",
+  "version": "1.0.0",
+  "description": "Manages company products, services, and inventory catalog",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "release": {
+      "stage": "pilot",
+      "customerAvailable": true,
+      "limitation": "Local-first catalog operations are ready for a controlled customer pilot."
+    },
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "catalog-overview",
+          "description": "Overview of catalog statistics",
+          "position": "top",
+          "size": "medium"
+        }
+      ]
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [],
+  "permissions": {
+    "required": [
+      "read:catalog",
+      "write:catalog",
+      "execute:catalog_search"
+    ],
+    "optional": [
+      "write:media",
+      "execute:catalog_import"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "health": "scripts/health-check.js"
+  },
+  "scripts": {
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/catalog.svg",
+    "screenshots": [
+      "/assets/screenshots/catalog-dashboard.png",
+      "/assets/screenshots/catalog-detail.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "catalog",
+    "products",
+    "services",
+    "inventory"
+  ],
+  "category": "business"
+}

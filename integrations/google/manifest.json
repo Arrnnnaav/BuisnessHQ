@@ -1,0 +1,86 @@
+{
+  "id": "google",
+  "name": "Google Services Integration",
+  "version": "1.0.0",
+  "description": "Unified integration with Google services including Search Console, Analytics, Ads, Drive, and more",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": false,
+      "settingsPage": true,
+      "navigationItem": false
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "seo",
+    "analytics",
+    "google_business"
+  ],
+  "permissions": {
+    "required": [
+      "read:google_search_console",
+      "write:google_search_console",
+      "read:google_analytics",
+      "write:google_analytics",
+      "read:google_ads",
+      "write:google_ads"
+    ],
+    "optional": [
+      "read:google_drive",
+      "write:google_drive",
+      "read:google_sheets",
+      "write:google_sheets",
+      "read:google_slides",
+      "write:google_slides",
+      "read:gmail",
+      "write:gmail",
+      "read:google_meet",
+      "write:google_meet"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/google.svg",
+    "screenshots": [
+      "/assets/screenshots/google-integration-dashboard.png",
+      "/assets/screenshots/search-console-integration.png",
+      "/assets/screenshots/analytics-integration.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "integration",
+    "google",
+    "search-console",
+    "analytics",
+    "ads",
+    "drive",
+    "sheets",
+    "gmail"
+  ],
+  "category": "utility"
+}

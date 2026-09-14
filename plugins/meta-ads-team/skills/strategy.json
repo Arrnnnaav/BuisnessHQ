@@ -1,0 +1,12 @@
+{
+  "id": "meta-ads-strategy",
+  "version": "1.0.0",
+  "purpose": "Turn verified research into an evidence-bound advertising brief.",
+  "requires": ["researchArtifact", "offerFacts", "audienceHypotheses"],
+  "produces": ["strategyBrief"],
+  "rules": [
+    "Label inference separately from verified facts.",
+    "Do not invent competitor, attribution, or sales evidence.",
+    "Do not propose a launch without an explicit budget and approval policy."
+  ]
+}

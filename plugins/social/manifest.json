@@ -1,0 +1,107 @@
+{
+  "id": "social",
+  "name": "Social Media Manager",
+  "version": "1.0.0",
+  "description": "Complete social media management system for creating, scheduling, and analyzing content across platforms",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "social-overview",
+          "description": "Overview of social media performance and engagement",
+          "position": "top",
+          "size": "medium"
+        },
+        {
+          "name": "social-calendar",
+          "description": "Social media content calendar and scheduling",
+          "position": "bottom",
+          "size": "large"
+        }
+      ]
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "content",
+    "seo",
+    "analytics",
+    "crm",
+    "campaigns"
+  ],
+  "permissions": {
+    "required": [
+      "read:social",
+      "write:social",
+      "execute:content_creation",
+      "execute:content_scheduling",
+      "execute:performance_analysis"
+    ],
+    "optional": [
+      "execute:community_management",
+      "execute:social_listening",
+      "execute:paid_advertising",
+      "execute:influencer_marketing",
+      "read:content",
+      "write:content",
+      "read:seo",
+      "write:seo",
+      "read:analytics",
+      "write:analytics",
+      "read:crm",
+      "write:crm",
+      "read:campaigns",
+      "write:campaigns"
+    ]
+  },
+  "fileStructure": {
+    "api": "api/",
+    "dashboard": "dashboard/",
+    "widgets": "widgets/",
+    "tools": "tools/",
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "events": "events/",
+    "settings": "settings/",
+    "migrations": "migrations/",
+    "health": "health-checks/"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "uninstall": "node scripts/uninstall.js",
+    "update": "node scripts/update.js",
+    "healthCheck": "node scripts/health-check.js"
+  },
+  "assets": {
+    "icon": "/assets/icons/social.svg",
+    "screenshots": [
+      "/assets/screenshots/social-dashboard.png",
+      "/assets/screenshots/social-calendar.png",
+      "/assets/screenshots/social-analytics.png",
+      "/assets/screenshots/social-engagement.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "social",
+    "social-media",
+    "content-scheduling",
+    "engagement",
+    "analytics",
+    "community-management",
+    "listening",
+    "advertising"
+  ],
+  "category": "growth"
+}

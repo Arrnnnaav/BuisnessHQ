@@ -1,0 +1,84 @@
+{
+  "id": "pricing",
+  "name": "Pricing & Revenue Intelligence",
+  "version": "1.0.0",
+  "description": "Advanced pricing engine with cost calculation, margin optimization, and competitive intelligence",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "release": {
+      "stage": "pilot",
+      "customerAvailable": true,
+      "limitation": "Produces internal pricing recommendations only; applying a price remains a human action."
+    },
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "pricing-overview",
+          "description": "Overview of pricing performance and margins",
+          "position": "top",
+          "size": "medium"
+        },
+        {
+          "name": "margin-analyzer",
+          "description": "Real-time margin analysis tool",
+          "position": "bottom",
+          "size": "large"
+        }
+      ]
+    }
+  },
+  "dependencies": [
+    "catalog"
+  ],
+  "capabilities": [
+    "pricing.analyze",
+    "pricing.recommend"
+  ],
+  "peerDependencies": [
+    "quotations",
+    "projects",
+    "crm"
+  ],
+  "permissions": {
+    "required": [
+      "read:pricing",
+      "write:pricing",
+      "execute:price_calculation",
+      "execute:margin_analysis",
+      "read:catalog"
+    ],
+    "optional": [
+      "write:catalog",
+      "execute:price_optimization",
+      "execute:competitive_analysis",
+      "read:quotations",
+      "write:quotations"
+    ]
+  },
+  "assets": {
+    "icon": "/assets/icons/pricing.svg",
+    "screenshots": [
+      "/assets/screenshots/pricing-dashboard.png",
+      "/assets/screenshots/price-calculator.png",
+      "/assets/screenshots/margin-analysis.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "pricing",
+    "revenue",
+    "margin",
+    "cost-calculation",
+    "competitive-analysis"
+  ],
+  "category": "business"
+}

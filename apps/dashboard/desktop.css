@@ -1,0 +1,2 @@
+.desktop-install{position:fixed;right:22px;bottom:22px;z-index:20;box-shadow:0 8px 28px #17212b33}
+.form{flex-wrap:wrap}.form label{display:grid;gap:6px;flex:1 1 260px}.form select,.form textarea{flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:11px;font:inherit;background:#fff;color:var(--ink)}.form textarea{width:100%;resize:vertical;line-height:1.5}

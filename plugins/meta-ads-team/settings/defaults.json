@@ -1,0 +1,8 @@
+{
+  "currency": "USD",
+  "goals": { "target_cpa": null, "target_roas": null },
+  "budget": { "daily": 0, "max_daily": 0, "max_budget_change_percent": 20 },
+  "optimization": { "min_spend_before_kill": 100, "min_conversions_before_scale": 3, "fatigue_frequency": 2.5 },
+  "approvals": { "launch_required": true, "budget_change_above": 0, "new_offer_required": true },
+  "mode": "staging-recommendations-only"
+}

@@ -1,0 +1,98 @@
+{
+  "id": "seo",
+  "name": "SEO Intelligence Suite",
+  "version": "1.0.0",
+  "description": "Comprehensive SEO tools for website optimization, keyword research, ranking tracking, and competitive analysis",
+  "author": {
+    "name": "BusinessOS Team",
+    "email": "team@businessos.example.com"
+  },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "release": {
+      "stage": "pilot",
+      "customerAvailable": true,
+      "requiredIntegrations": ["search_console", "wordpress_staging"],
+      "limitation": "Audits and proposals work without writes; publishing is restricted to an approved WordPress staging draft."
+    },
+    "ui": {
+      "showInDashboard": true,
+      "settingsPage": true,
+      "navigationItem": true,
+      "widgets": [
+        {
+          "name": "seo-overview",
+          "description": "Overview of SEO performance and visibility",
+          "position": "top",
+          "size": "medium"
+        },
+        {
+          "name": "keyword-tracker",
+          "description": "Real-time keyword ranking tracker",
+          "position": "bottom",
+          "size": "large"
+        }
+      ]
+    }
+  },
+  "dependencies": [],
+  "peerDependencies": [
+    "catalog",
+    "content",
+    "projects",
+    "google_business",
+    "analytics",
+    "website"
+  ],
+  "permissions": {
+    "required": [
+      "read:seo",
+      "write:seo",
+      "execute:seo_audit",
+      "execute:keyword_research",
+      "read:website"
+      ,"search_console.query.read"
+      ,"wordpress.production.page.read"
+      ,"wordpress.staging.draft.create"
+      ,"wordpress.staging.draft.update_owned"
+    ],
+    "optional": [
+      "write:website",
+      "execute:website_optimization",
+      "execute:content_optimization",
+      "execute:ranking_tracking",
+      "read:analytics",
+      "write:analytics"
+    ]
+  },
+  "deniedCapabilities": [
+    "wordpress.production.publish",
+    "wordpress.page.delete"
+  ],
+  "fileStructure": {
+    "agents": "opportunity-engine.mjs",
+    "tools": "validators.mjs",
+    "workflows": "experiment-service.mjs"
+  },
+  "assets": {
+    "icon": "/assets/icons/seo.svg",
+    "screenshots": [
+      "/assets/screenshots/seo-dashboard.png",
+      "/assets/screenshots/keyword-research.png",
+      "/assets/screenshots/ranking-tracker.png",
+      "/assets/screenshots/site-audit.png"
+    ]
+  },
+  "keywords": [
+    "businessos",
+    "plugin",
+    "seo",
+    "search-engine-optimization",
+    "keyword-research",
+    "ranking-tracking",
+    "website-audit",
+    "content-optimization"
+  ],
+  "category": "growth"
+}

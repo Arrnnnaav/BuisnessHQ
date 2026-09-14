@@ -1,0 +1,23 @@
+import assert from "node:assert/strict";
+import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { ControlPlaneMarketplace } from "../core/runtime/index.mjs";
+import { generateSigningKeys, PluginRegistry } from "../control-plane/index.mjs";
+
+const root = await mkdtemp(join(tmpdir(), "businessos-remote-marketplace-"));
+const keys = generateSigningKeys();
+const registry = new PluginRegistry({ stateFile: join(root, "registry.json"), signingKeys: keys });
+await registry.load();
+await registry.registerPlugin({ id: "remote-demo", name: "Remote Demo", description: "A signed demo", category: "growth" });
+await registry.publishVersion({ pluginId: "remote-demo", version: "1.0.0", files: { "plugin.json": JSON.stringify({ schema: "businessos-plugin/v1", id: "remote-demo", name: "Remote Demo", version: "1.0.0", description: "A signed demo", runtime: { type: "node" }, capabilities: ["demo.run"], permissions: [] }), "index.mjs": "export const run = true;" }, channel: "stable" });
+const keysPath = join(root, "keys.json"); await writeFile(keysPath, JSON.stringify(keys));
+const marketplace = new ControlPlaneMarketplace({ registryFile: join(root, "registry.json"), publicKeyFile: keysPath, installRoot: join(root, "installed") });
+await marketplace.load();
+assert.equal(marketplace.catalog({ tenantId: "tenant-1" })[0].id, "remote-demo");
+const installed = await marketplace.install("remote-demo", { tenantId: "tenant-1" });
+assert.equal(installed.verified, true);
+assert.equal((await marketplace.installVersion("remote-demo", "1.0.0", { tenantId: "tenant-1" })).version, "1.0.0");
+await assert.rejects(() => marketplace.installVersion("remote-demo", "9.0.0", { tenantId: "tenant-1" }), /not available/);
+assert.equal(marketplace.catalog().length, 1);
+console.log("control-plane marketplace self-test passed");

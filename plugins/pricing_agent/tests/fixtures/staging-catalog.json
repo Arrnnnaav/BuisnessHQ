@@ -1,0 +1,4 @@
+[
+  {"sku": "BRO-100", "name": "A4 Brochure Printing", "category": "Brochures", "price": 1200, "cost": 700, "currency": "INR", "unit": "batch"},
+  {"sku": "CAR-250", "name": "Premium Visiting Cards", "category": "Cards", "price": 900, "cost": 460, "currency": "INR", "unit": "batch"}
+]

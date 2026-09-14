@@ -1,0 +1,19 @@
+node_modules/
+
+# Runtime state for a live workspace. Contains the credential vault, its encryption key,
+# owner password hashes and tenant business data — never commit it.
+data/
+
+# Python side of the pricing agent
+plugins/pricing_agent/.venv/
+**/__pycache__/
+*.pyc
+
+*.log
+
+# Disposable browser/release QA artifacts
+.playwright-cli/
+.tmp/release-ui-qa-20260912/
+
+# Vendored upstream checkout with its own .git — not a submodule
+plugins/pricing_agent/vendor

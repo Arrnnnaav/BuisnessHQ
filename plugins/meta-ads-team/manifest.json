@@ -1,0 +1,45 @@
+{
+  "id": "meta-ads-team",
+  "name": "AI Meta Ads Team",
+  "version": "1.0.0",
+  "description": "A coordinated seven-agent Meta advertising team for research, creative production, guarded campaign planning, optimization recommendations, attribution, reporting, and client continuity.",
+  "author": { "name": "BusinessOS Team", "email": "team@businessos.example.com" },
+  "license": "MIT",
+  "businessos": {
+    "minVersion": "0.1.0",
+    "testedUpTo": "0.1.0",
+    "release": {
+      "stage": "preview",
+      "customerAvailable": true,
+      "requiredIntegrations": ["meta", "verified_sales_source"],
+      "limitation": "Research, plans, safety checks, and reports only; Meta campaign writes are not implemented."
+    },
+    "ui": { "showInDashboard": true, "settingsPage": true, "navigationItem": true, "widgets": [] }
+  },
+  "dependencies": [],
+  "peerDependencies": ["analytics", "catalog", "content", "crm"],
+  "capabilities": [
+    "meta_ads.research",
+    "meta_ads.copy",
+    "meta_ads.creative",
+    "meta_ads.campaign.plan",
+    "meta_ads.optimize",
+    "meta_ads.attribution",
+    "meta_ads.report",
+    "meta_ads.client.thread"
+  ],
+  "permissions": {
+    "required": ["read:meta_ads", "read:attribution", "read:analytics"],
+    "optional": ["write:meta_ads", "execute:meta_ads_draft", "write:reports", "write:crm"]
+  },
+  "deniedCapabilities": ["meta_ads.unapproved_launch", "meta_ads.unbounded_budget_change", "meta_ads.delete_history"],
+  "fileStructure": {
+    "agents": "agents/",
+    "skills": "skills/",
+    "workflows": "workflows/",
+    "settings": "settings/",
+    "health": "health-checks/"
+  },
+  "keywords": ["meta", "facebook ads", "advertising", "strategy", "creative", "attribution", "optimization", "reporting", "agent team"],
+  "category": "growth"
+}

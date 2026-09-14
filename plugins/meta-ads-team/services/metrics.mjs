@@ -1,0 +1,4 @@
+export function normalizeMetaInsight(insight = {}, sales = {}) {
+  const spend = Number(insight.spend ?? 0); const impressions = Number(insight.impressions ?? 0); const clicks = Number(insight.clicks ?? 0); const conversions = Number(insight.conversions ?? insight.actions ?? 0); const revenue = Number(sales.revenue ?? insight.purchaseValue ?? 0);
+  return { campaignId: insight.campaignId ?? insight.campaign_id ?? null, adSetId: insight.adSetId ?? insight.adset_id ?? null, dateStart: insight.dateStart ?? insight.date_start ?? null, dateStop: insight.dateStop ?? insight.date_stop ?? null, spend, impressions, clicks, conversions, revenue, ctr: impressions ? clicks / impressions : 0, cpa: conversions ? spend / conversions : null, roas: spend ? revenue / spend : null, attribution: { salesSource: sales.source ?? "unavailable", platformConversions: conversions, realOrders: Number(sales.orders ?? 0), confidence: sales.source ? "reported" : "unknown" } };
+}

@@ -1,0 +1,34 @@
+// Catalog API Routes
+// Base path: /api/catalog
+
+// Product/Service Management
+GET    /products          - List all products/services with filtering/pagination
+POST   /products          - Create new product/service
+GET    /products/:id      - Get specific product/service details
+PUT    /products/:id      - Update product/service
+DELETE /products/:id      - Delete product/service
+GET    /products/search   - Search products/services by query
+
+// Categories
+GET    /categories        - List all categories
+POST   /categories        - Create new category
+GET    /categories/:id    - Get category details
+PUT    /categories/:id    - Update category
+DELETE /categories/:id    - Delete category
+
+// Media Management
+POST   /media             - Upload media file
+GET    /media/:id         - Get media file info
+DELETE /media/:id         - Delete media file
+
+// Import/Export
+POST   /import            - Import catalog from file (CSV, Excel, PDF)
+GET    /export            - Export catalog to file
+
+// Statistics & Reporting
+GET    /stats             - Get catalog statistics
+GET    /reports/:type     - Get specific report type
+
+// Special Operations
+POST   /refresh           - Refresh catalog from external sources
+POST   /validate          - Validate catalog data integrity
